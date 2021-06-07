@@ -8,7 +8,7 @@ A bespoke sample compression codec for [64K intros](https://en.wikipedia.org/wik
 
 pulsejet lifts a lot of ideas from [Opus](https://opus-codec.org/), and more specifically, its [CELT](https://en.wikipedia.org/wiki/CELT) layer, which is used for coding musical signals. [This blog post](https://yupferris.github.io/blog/2021/06/07/pulsejet-sample-compression-codec-for-64k.html) outlines much of the current codec design, as well as provides some background behind why certain decisions were made.
 
-Relatively speaking, pulsejet is in its early days, and is admittedly pretty crude, especially the encoder. Surprisingly, though, it already appears to be quite good, as well as work around a lot of other issues with using existing codecs, hence the standalone public release. Expect further development/versions of this library, as well as integration in [WaveSabre](https://github.com/logicomacorp/WaveSabre).
+Relatively speaking, pulsejet is in its early days, and is admittedly pretty crude, especially the encoder. Surprisingly, though, it already appears to be quite good, as well as works around a lot of other issues with using existing codecs, hence the standalone public release. Expect further development/versions of this library, as well as integration in [WaveSabre](https://github.com/logicomacorp/WaveSabre).
 
 ## comparisons
 
