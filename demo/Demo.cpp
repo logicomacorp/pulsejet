@@ -58,6 +58,23 @@ static vector<uint8_t> ReadFile(const char *fileName)
 	return ret;
 }
 
+static vector<float> ReadFileAsFloats(const char *fileName)
+{
+	ifstream inputFile(fileName, ios::binary | ios::ate);
+	const auto inputFileSize = inputFile.tellg();
+	if (inputFileSize % sizeof(float))
+	{
+		cout << "ERROR: Input size is not aligned to float size\n\n";
+		return 1;
+	}
+	inputFile.seekg(0, ios::beg);
+
+	vector<float> ret(inputFileSize);
+	inputFile.read(reinterpret_cast<char *>(ret.data()), inputFileSize);
+
+	return ret;
+}
+
 int main(int argc, const char **argv)
 {
 	if (argc < 4)
@@ -84,22 +101,14 @@ int main(int argc, const char **argv)
 		const auto outputFileName = argv[4];
 
 		cout << "reading ... " << flush;
-		const auto input = ReadFile(inputFileName);
-		cout << "ok\n";
-
-		cout << "size check ... " << flush;
-		if (input.size() % sizeof(float))
-		{
-			cout << "ERROR: Input size is not aligned to float size\n\n";
-			return 1;
-		}
+		const auto input = ReadFileAsFloats(inputFileName);
 		cout << "ok\n";
 
 		cout << "encoding ... " << flush;
-		const uint32_t numSamples = static_cast<uint32_t>(input.size()) / sizeof(float);
+		const uint32_t numSamples = input.size();
 		const double sampleRate = 44100.0;
 		double totalBitsEstimate;
-		const auto encodedSample = Pulsejet::Encode(reinterpret_cast<const float *>(input.data()), numSamples, sampleRate, targetBitRate, totalBitsEstimate);
+		const auto encodedSample = Pulsejet::Encode(input.data(), numSamples, sampleRate, targetBitRate, totalBitsEstimate);
 		const auto bitRateEstimate = totalBitsEstimate / 1000.0 / (static_cast<double>(numSamples) / sampleRate);
 		cout << "ok, compressed size estimate: " << static_cast<uint32_t>(ceil(totalBitsEstimate / 8.0)) << " byte(s) (~" << setprecision(4) << bitRateEstimate << "kbps)\n";
 
